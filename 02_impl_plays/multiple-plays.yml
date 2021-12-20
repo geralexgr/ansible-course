@@ -1,0 +1,17 @@
+---
+- name: playbook 1
+  hosts: localhost
+  tasks:
+    - name: display message 1
+      debug: 
+        msg: "printing a message from play 1"
+    
+
+
+
+- name: playbook 2
+  hosts: localhost
+  tasks:
+  - name: display message 2
+    debug:
+      msg: "printing a message from play 2"
