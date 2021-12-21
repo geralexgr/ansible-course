@@ -1,0 +1,46 @@
+---
+- name: Enable intranet services
+  hosts: clients
+  become: true
+  tasks:
+    
+    - name: latest version of httpd and firewalld installed
+      yum:
+        name: 
+          - httpd
+          - firewalld
+      state: latest
+
+    - name: test html page is installed
+      copy:
+        content: "Welcome to the example intranet!"
+        dest: /var/www/html/index.html
+    
+    - name: firewalld enabled and running
+      service:
+        name: firewalld
+        enabled: true
+        state: started
+    
+    - name: firewalld permits access to httpd service
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true 
+    - name: httpd enabled and running
+      service:
+        name: httpd
+        enabled: true
+        state: started
+
+- name: Test intranet web server
+  hosts: localhost
+  become: no
+  tasks: 
+    
+    - name: connect to intranet web server
+      uri:
+        url: http://centos-lab2
+        return_content: true
+        status_code: 200

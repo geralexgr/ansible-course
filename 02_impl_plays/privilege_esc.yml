@@ -1,0 +1,13 @@
+---
+- name: privilege escalation playbook
+  hosts: clients
+  remote_user: newbie
+  become: true
+  become_user: root
+  
+  tasks:
+    - name: create a new user on machine
+      user:
+        name: testuser
+        comment: Test user
+        uid: 1122
