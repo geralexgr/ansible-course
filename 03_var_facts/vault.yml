@@ -1,0 +1,12 @@
+---
+- name: using an ansible vault
+  hosts: clients
+  become: true
+  remote_user: newbie
+  vars_files:
+    - secret.yml
+  tasks:
+    - name: create user from secret.yml
+      user:
+        name: "{{ username }}"
+        password: " {{ pwhash }}"
