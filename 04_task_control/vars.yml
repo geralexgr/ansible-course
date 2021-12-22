@@ -1,0 +1,10 @@
+---
+packages:
+  - httpd
+  - mariadb
+
+services:
+  - httpd
+  - firewalld
+
+web_service: httpd

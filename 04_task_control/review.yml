@@ -1,0 +1,58 @@
+---
+- name: Playbook Control review
+  hosts: clients
+  vars_files: 
+    - vars.yml 
+  tasks:
+    # Fail Fast Message
+    - name: Show failed system requirements Message
+      fail:
+        msg: "The {{ inventory_hostname }} did not meet minimum reqs. "
+      when: (ansible_memtotal_mb < min_ram_mb) or (ansible_distribution != "RedHat")
+
+    - name: Ensure all packages are present
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Ensure services are started and enabled
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+        loop: "{{ services }}"
+
+    - name: Copying files on httpd
+      block: 
+        - name: copy index.html
+          copy:
+            src:
+            dest: 
+
+        - name: copy another.html
+          copy:
+            src: 
+            dest:
+          notify: restart web service
+
+      rescue:
+        - name: configuration erorr Message
+          debug:
+            msg: One or more of the configuration changes failed.
+
+    - name: ensure web server ports are open
+      firewalld:
+        service: "{{ item }}"
+        immediate: true
+        permanent: true
+        state: enabled
+      loop:
+        - http
+        - https
+  handlers:
+    - name: restart web service
+      service: 
+        name: "{{ web_service }}"
+        state: restarted
+        
+
+        
