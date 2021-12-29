@@ -3,13 +3,13 @@
   hosts: clients
   become: true
   tasks:
-    
+  
     - name: latest version of httpd and firewalld installed
       yum:
         name: 
           - httpd
           - firewalld
-      state: latest
+        state: latest
 
     - name: test html page is installed
       copy:
@@ -28,6 +28,7 @@
         permanent: true
         state: enabled
         immediate: true 
+    
     - name: httpd enabled and running
       service:
         name: httpd
