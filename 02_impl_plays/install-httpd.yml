@@ -13,6 +13,7 @@
         dest: /var/www/html/index.html
 
     - name: httpd is started
-      service: httpd
-      state: started
-      enabled: true
+      service:
+        name: httpd
+        state: started
+        enabled: true
