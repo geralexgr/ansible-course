@@ -9,4 +9,4 @@
     - name: create user from secret.yml
       user:
         name: "{{ username }}"
-        password: " {{ pwhash }}"
+        password: "{{ pwhash }}"
