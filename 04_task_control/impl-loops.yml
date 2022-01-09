@@ -1,0 +1,30 @@
+---
+- name: Using loops to install packages and create users
+  hosts: clients
+  vars:
+    packages_to_install:
+      - mariadb-server
+      - httpd
+  tasks:
+    - name: Install httpd and mariadb
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_to_install }}"
+
+    - name: Ensure that httpd and mariadb are running
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      loop:
+        - mariadb
+        - httpd
+
+    - name: create users on remote machines
+      user:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - ansibleuser1
+        - ansibleuser2

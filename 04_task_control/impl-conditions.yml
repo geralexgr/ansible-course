@@ -1,0 +1,52 @@
+---
+- name: Performing condition checks
+  hosts: clients
+  vars:
+    my_service: httpd
+    my_bool: true
+
+    supported_distros:
+      - RedHat
+      - CentOS
+  tasks:
+   - name: test variable is defined
+     yum:
+       name: "{{ my_service }}"
+     when: my_service is defined
+
+   - name: Loop echo task
+     shell: "echo this is my item: {{ item }}"
+     loop:
+       - one
+       - two
+     register: echo_results
+
+   - name: show echo_results variable
+     debug:
+       var: echo_results
+
+   - name: run when my_bool is true
+     debug:
+       msg: it is true
+     when: my_bool
+
+   - name: install httpd when OS in supported distros
+     yum:
+       name: httpd
+       state: present
+     when: ansible_distribution in supported_distros
+
+   - name: install mariadb-server if enough space on root
+     yum:
+       name: mariadb-server
+       state: latest
+     loop: "{{ ansible_mounts }}"
+     when: item.mount =="/" and item.size_available > 3000000
+
+   - name: perform action only on CentOS 8 version
+     debug:
+       msg: I am working on Centos8
+     when:
+       - ansible_distribution == "CentOS"
+       - ansible_distribution_major_version == "8"
+     
