@@ -1,0 +1,26 @@
+---
+- name: handlers playbook
+  hosts: localhost
+  tasks:
+    - name: execute commands
+      command: "{{ item }}"
+      loop:
+        - date
+        - whoami
+        - pwd
+      register: date_output
+
+    - name: echo something when date_output is true
+      debug:
+        msg: "{{ item.stdout }}"
+      loop: "{{ date_output.results }}"
+      when: item.stdout == "root"
+      changed_when: true
+      notify:
+        - dummy handler
+
+  handlers:
+    - name: dummy handler
+      debug:
+        msg: "handler executed"
+
