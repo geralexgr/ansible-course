@@ -1,0 +1,28 @@
+---
+- name: task block
+  hosts: localhost
+  tasks:
+    - name: group many tasks together
+
+      block:
+        - name: task1 of block
+          debug:
+            msg: hello from task1
+
+        - name: task2 of block
+          debug:
+            msg: hello from task2
+
+        - name: task3 failure
+          fail:
+            msg: this task will fail
+
+      rescue:
+        - name: rescuing the failure
+          debug:
+            msg: I will rescue the failure
+
+      always:
+        - name: this task will run always
+          debug:
+            msg: running always

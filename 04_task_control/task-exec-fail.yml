@@ -1,0 +1,35 @@
+---
+- name: Task execution and failure
+  hosts: localhost
+  tasks:
+    - name: latest version of notapkg is installed
+      yum:
+        name: notapkg
+        state: latest
+      ignore_errors: true
+
+    - name: task which always notifies its handler
+      command: /bin/true
+      notify: restart crond
+    
+    - name: run user creation script
+      shell: /usr/local/bin/create_users.sh
+      register: command_result
+      failed_when: "'Password missing' in command_result.stdout"
+      ignore_errors: true
+
+    - name: report script faulure
+      fail:
+        msg: "The password is missing in the output"
+      when: "'Password missing' in command_result.stdout"
+
+    - name: changed always task
+      command: date
+      changed_when: true
+
+
+  handlers:
+    - name: restart crond
+      service:
+        name: crond
+        state: restarted
