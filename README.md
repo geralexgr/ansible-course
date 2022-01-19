@@ -64,4 +64,4 @@ This is a preparation course for the RHCE exam (EX294). Following the official e
     Use Ansible Vault in playbooks to protect sensitive data
 
 
-Course available on Udemy: https://www.udemy.com
+Course available on Udemy: https://www.youtube.com/playlist?list=PL29L3SIOICr3hSJGHD549HcEPW6rAbd1j
